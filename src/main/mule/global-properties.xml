@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	<db:config name="Global-MySql-DB" doc:name="Database Config" doc:id="3f0bd385-726f-46ef-9df0-0354e0b751a0" >
+		<db:my-sql-connection host="${hostsql-db.host}" port="${hostsql-db.port}" user="${hostsql-db.username}" password="${hostsql-db.password}" database="${hostsql-db.schema}" />
+	</db:config>
+	<configuration-properties doc:name="Configuration properties" doc:id="94fa1d42-4025-4f7e-b7ff-8749ce265b87" file="${env}.yaml" />
+	<global-property doc:name="Global Property" doc:id="ffb67dd9-58cb-4637-a59a-6b794c6381c2" name="env" value="dev" />
+	<configuration doc:name="Configuration" doc:id="4e8f1c2f-1168-4689-9901-3315ea748cc9" defaultErrorHandler-ref="common-errorsError_Handler" />
+</mule>

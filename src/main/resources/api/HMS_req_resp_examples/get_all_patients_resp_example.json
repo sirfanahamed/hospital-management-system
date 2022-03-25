@@ -1,0 +1,32 @@
+[
+  {
+  "Name" : "John",
+  "Address" : "D/no-8-292 , kothapeta , kanigiri",
+  "Age" : 27,
+  "Gender" : "Male",
+  "PhoneNumber" : 1234567890,
+  "Email" : "az@gmail.com",
+  "BloodType" : "O+ve",
+  "Height" : 170,
+  "Weight" : 90,
+  "Disease" : "covid",
+  "MedicalDetails" : "Test Details",
+  "Status" : "admitted" 
+
+},
+{
+  "Name" : "Mike",
+  "Address" : "D/no-8-292 , kothapeta , kanigiri",
+  "Age" : 27,
+  "Gender" : "Male",
+  "PhoneNumber" : 1234567890,
+  "Email" : "az@gmail.com",
+  "BloodType" : "O+ve",
+  "Height" : 170,
+  "Weight" : 90,
+  "Disease" : "covid",
+  "MedicalDetails" : "Test Details",
+  "Status" : "admitted" 
+
+}
+]

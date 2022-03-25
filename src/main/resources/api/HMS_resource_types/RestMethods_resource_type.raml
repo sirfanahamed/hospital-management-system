@@ -1,0 +1,60 @@
+#%RAML 1.0 ResourceType
+ post?:
+   body:
+    application/json:
+      type: <<post_input>>
+      example: <<post-request-example>>
+   responses: 
+        201:
+         body:
+          application/json:
+            example:
+              <<post-response-example>>
+
+ get?:
+  responses:
+    200:
+      body:
+        application/json:
+          example:
+            <<get-response-example>>
+
+ delete?:
+   responses:
+     200:
+      body:
+        application/json:
+          example:
+            <<delete-response-example>>
+
+ patch?:
+    body:
+     application/json:
+      type: <<patch_input>>
+      example: <<patch-request-example>>
+    responses: 
+        200:
+          body:
+           application/json:
+            example:
+              <<patch-response-example>>
+    
+
+    
+
+                 
+
+
+    
+
+   
+
+              
+          
+
+                                   
+                
+                        
+
+
+  

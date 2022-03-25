@@ -1,0 +1,1 @@
+"Hospital is not Registered.."

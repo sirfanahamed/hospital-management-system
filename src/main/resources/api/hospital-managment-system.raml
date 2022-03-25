@@ -1,0 +1,175 @@
+#%RAML 1.0
+title: Hospital Managment System
+description: This Project is the design of Hospital Managment Api's 
+baseUri: www.hms.com
+traits:
+  error_traits : !include HMS_traits/errorcodes.raml
+types:
+   registerhospital_data_type : !include HMS_data_types/RegisterHospital.raml
+   registerpatient_data_type : !include HMS_data_types/RegisterPatient.raml
+   update_patient_details_by_hospital_data_type : !include HMS_data_types/UpdatePatientDetailsByHospital.raml
+   update_patient_details_by_patient_data_type : !include HMS_data_types/UpdatePatientDetailsByPatient.raml
+   dischargepatient_data_type : !include HMS_data_types/DischargePatient.raml
+   hid_uri_parameter_data_type : !include HMS_data_types/Hid_uri_parameters.raml
+   pid_uri_parameter_data_type : !include HMS_data_types/Pid_uri_parameters.raml
+
+resourceTypes:
+   rest_methods : !include HMS_resource_types/RestMethods_resource_type.raml
+       
+
+/hospital:
+   /registerhospital:  
+    post:
+    type:
+     rest_methods : {
+      post_input : registerhospital_data_type,
+      post-request-example : !include HMS_req_resp_examples/register_hospital_req_example.json,
+      post-response-example : !include HMS_req_resp_examples/register_hospital_resp.json
+    } 
+    is:
+      - error_traits
+   
+
+   /{hid}:
+     uriParameters:
+       hid_uri_parameter_data_type
+
+       
+     /deregisterhospital:
+      delete:
+       queryParameters: 
+        password :
+         type: string
+         required: true  
+            
+      type:
+          rest_methods : {delete-response-example: {"message" : "Hospital Deregistered"} } 
+      is:
+        - error_traits
+ 
+     
+     /admitpatient:
+      post:
+      type:
+        rest_methods : {
+          post_input : registerpatient_data_type,
+          post-request-example: !include HMS_req_resp_examples/register_patient_req_example.json,
+          post-response-example: !include HMS_req_resp_examples/register_hospital_resp.json
+
+        } 
+      is:
+          - error_traits  
+     /dischargepatient/{pid}:
+       uriParameters:
+        pid_uri_parameter_data_type
+
+       patch:
+       type:
+         rest_methods : {
+           patch_input : dischargepatient_data_type,
+           patch-request-example: !include HMS_req_resp_examples/discharge_patient_req_example.json,
+           patch-response-example: !include HMS_req_resp_examples/discharge_patient_resp.json
+
+         }  
+       is:
+          - error_traits 
+
+         
+              
+
+     /getallpatientsinfo:
+       get:
+       type:
+        rest_methods : {
+          get-response-example: !include HMS_req_resp_examples/get_all_patients_resp_example.json
+        }
+        is:
+        - error_traits
+         
+
+                    
+     /getpatientinfo/{pid}:
+       uriParameters:
+        pid_uri_parameter_data_type
+       get:
+       type:
+         rest_methods : {
+           get-response-example: !include HMS_req_resp_examples/get_all_patients_resp_example.json
+         }  
+       is:
+        - error_traits
+  
+     /updatepatientinfo/{pid}:
+       uriParameters:
+         pid_uri_parameter_data_type
+       put:
+       type:
+         rest_methods : {
+           patch_input : update_patient_details_by_hospital_data_type,
+           patch-request-example: !include HMS_req_resp_examples/update_patient_details_by_hospital_req.json,
+           patch-response-example: !include HMS_req_resp_examples/update_patient_details_by_hospital_resp.json
+
+         }  
+       is:
+          - error_traits  
+
+     /hospitalstats:
+       get:
+       type:
+        rest_methods : {
+          get-response-example: !include HMS_req_resp_examples/hospital_stats_resp.json
+        }
+        is:
+        - error_traits         
+
+/patient:  
+ /searchhospital:
+   get:
+     queryParameters:
+      Name?: string
+      Area? : string
+      City? : string
+   type:
+        rest_methods : {
+          get-response-example: !include HMS_req_resp_examples/search_hospital_response.json
+        }
+        is:
+        - error_traits 
+   /sortbybeds:     
+     get:
+      queryParameters:
+       sortbybeds: 
+        enum:
+          - ascending
+          - descending  
+     
+     type:
+        rest_methods : {
+          get-response-example: !include HMS_req_resp_examples/search_hospital_response.json
+        }
+     is:
+        - error_traits
+        
+ 
+ /{hid}/update/{pid}:
+   uriParameters:
+     pid_uri_parameter_data_type
+     hid_uri_parameter_data_type
+   put:
+   type:
+         rest_methods : {
+           patch_input : update_patient_details_by_patient_data_type,
+           patch-request-example: !include HMS_req_resp_examples/update_patient_details_by_hospital_req.json,
+           patch-response-example: !include HMS_req_resp_examples/update_patient_details_by_hospital_resp.json
+
+         }  
+   is:
+          - error_traits 
+
+
+  
+
+        
+       
+  
+

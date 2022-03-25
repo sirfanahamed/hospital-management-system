@@ -1,0 +1,7 @@
+{
+  "BloodType":"O+ve",
+  "Height" : 170,
+  "Weight" : 90,
+  "Disease" : "covid",
+  "MedicalDetails": "Patient is suffering with acute covid symptoms"  
+}

@@ -1,0 +1,12 @@
+httplistener :
+ host : "localhost"
+ port : "8081"
+ 
+
+ 
+hostsql-db:
+ host: "sql6.freemysqlhosting.net"
+ username: "sql6463705"
+ password: "QHPQ9p8m1Y"
+ port: "3306"
+ schema : "sql6463705"
