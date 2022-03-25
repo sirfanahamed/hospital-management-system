@@ -17,5 +17,17 @@ output application/json
 				</ee:message>
 			</ee:transform>
 		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="338086f9-a584-40a7-a5e5-1fc949656cb6" >
+			<ee:transform doc:name="Transform Message" doc:id="34527f9a-9f39-4b96-92ad-ebe01eb700e5" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"Message" : "Application not responding"
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+		</on-error-propagate>
 	</error-handler>
 </mule>
