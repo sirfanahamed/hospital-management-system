@@ -40,13 +40,13 @@
 						</sharedLibrary>
 					</sharedLibraries>
 					<cloudHubDeployment>
-					<username>${cloudhub-login.username}</username>
-					<password>${cloudhub-login.password}</password>
-					<environment>${cloudhub-login.environment}</environment>
-					<workers>${cloudhub-login.workers}</workers>
-					<workerType>${cloudhub-login.workerType}</workerType>
-					<applicationName>${cloudhub-login.applicationName}</applicationName>
-					<muleVersion> ${cloudhub-login.muleVersion}</muleVersion>
+					<username>100503</username>
+					<password>Irfan..ii1</password>
+					<environment>Sandbox</environment>
+					<workers>1</workers>
+					<workerType>Micro</workerType>
+					<applicationName>hms-api</applicationName>
+					<muleVersion>4.4.0</muleVersion>
 					</cloudHubDeployment>
 				</configuration>
 			</plugin>
