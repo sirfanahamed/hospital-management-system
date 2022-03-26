@@ -14,3 +14,8 @@ hostsql-db:
 cloudhub-login:
  username : "100503"
  password : "Irfan..ii1"
+ environment : "Sandbox"
+ workers : 1
+ workerType : "Micro"
+ applicationName: "hospital-management-api"
+ muleVersion : 4.4.0
