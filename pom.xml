@@ -9,8 +9,6 @@
 
 	<name>hms</name>
 
-
-
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -41,6 +39,15 @@
 							<artifactId>mysql-connector-java</artifactId>
 						</sharedLibrary>
 					</sharedLibraries>
+					<cloudHubDeployment>
+					<username>${cloudhub-login.username}</username>
+					<password>${cloudhub-login.password}</password>
+					<environment>${cloudhub-login.environment}</environment>
+					<workers>${cloudhub-login.workers}</workers>
+					<workerType>${cloudhub-login.workerType}</workerType>
+					<applicationName>${cloudhub-login.applicationName}</applicationName>
+					<muleVersion> ${cloudhub-login.muleVersion}</muleVersion>
+					</cloudHubDeployment>
 				</configuration>
 			</plugin>
 			<plugin>

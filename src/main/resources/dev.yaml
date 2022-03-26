@@ -10,3 +10,7 @@ hostsql-db:
  password: "QHPQ9p8m1Y"
  port: "3306"
  schema : "sql6463705"
+ 
+cloudhub-login:
+ username : "100503"
+ password : "Irfan..ii1"
