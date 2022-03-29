@@ -13,9 +13,8 @@ cloudhub:
  workerType : "Micro"
  api_name : "hms_api"
  version : "4.4.0"
- 
-mule:
- env : "dev" 
+ mule:
+  env : "dev" 
 
         
  

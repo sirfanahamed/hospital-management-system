@@ -47,7 +47,7 @@
 						<muleVersion>{cloudhub.version}</muleVersion>
 						<objectStoreV2>true</objectStoreV2>
 						<properties>
-						 <mule.env>${mule.env}</mule.env>
+						 <mule.env>${cloudhub.mule.env}</mule.env>
 						</properties>
 				
 					</cloudHubDeployment>
