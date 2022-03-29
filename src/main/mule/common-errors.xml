@@ -1,33 +1,139 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+<mule xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd">
 	<error-handler name="common-errorsError_Handler" doc:id="3b9f6c75-8af1-479d-8ba8-49b987317b25" >
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="832b34c4-b28d-42fe-aec4-5c4933007f82" type="DB:CONNECTIVITY">
-			<ee:transform doc:name="Transform Message" doc:id="9fe297c6-51f7-4a6f-b758-a558d0da2459" >
-				<ee:message >
-					<ee:set-payload ><![CDATA[%dw 2.0
+			<flow-ref doc:name="Flow Reference" doc:id="ba500d79-4bb8-4601-99d1-a8e3077f2911" name="common-errorsFlow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="c39dabfc-f968-462f-8b58-4555d08f977d" type="APIKIT:BAD_REQUEST">
+			<flow-ref doc:name="common-errorsFlow" doc:id="0857d916-a534-4c23-99e2-72852f4446a1" name="common-errorsFlow"/>
+		</on-error-propagate>
+		     <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
- {
-"Message" : "We are facing some technical Issue...Please try again later"
-}]]></ee:set-payload>
-				</ee:message>
-			</ee:transform>
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+			<flow-ref doc:name="common-errorsFlow" doc:id="5a195ec3-fd7c-434f-9c53-f26ef7fcf32b" name="common-errorsFlow"/>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:METHOD_NOT_ALLOWED">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Method not allowed"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">405</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+			<flow-ref doc:name="common-errorsFlow" doc:id="80904b91-42ed-4616-a7ee-a33abf7186e6" name="common-errorsFlow"/>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not acceptable"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">406</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+			<flow-ref doc:name="common-errorsFlow" doc:id="ce485015-17e5-449f-b461-7d6094cd23e4" name="common-errorsFlow"/>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Unsupported media type"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">415</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+			<flow-ref doc:name="common-errorsFlow" doc:id="57fde13a-bee0-490b-b56b-4d0dab06e421" name="common-errorsFlow"/>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
+                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not Implemented"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">501</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+			<flow-ref doc:name="common-errorsFlow" doc:id="336fcf72-01f1-409c-8648-801c27db76e0" name="common-errorsFlow"/>
+            </on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="104cc9e6-bcba-47f1-b707-5b5a97eb0bb0" type="ANY">
+			<flow-ref doc:name="common-errorsFlow" doc:id="a98a379b-469d-4291-8664-052363af741e" name="common-errorsFlow"/>
 		</on-error-propagate>
-		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="338086f9-a584-40a7-a5e5-1fc949656cb6" >
-			<ee:transform doc:name="Transform Message" doc:id="34527f9a-9f39-4b96-92ad-ebe01eb700e5" >
-				<ee:message >
-					<ee:set-payload ><![CDATA[%dw 2.0
+   
+	</error-handler>
+	<flow name="common-errorsFlow" doc:id="e707e791-a35f-4056-9db5-ac02494fd468" >
+		<ee:transform doc:name="Transform Message" doc:id="a6b2bb89-39b7-40ff-b853-1ce3e978799d" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
 ---
 {
-	"Message" : "Application not responding"
+"Transaction_Name" : attributes.requestUri,
+"Transaction_Time" : now() as String {format : "dd-MM-yyyy-HH:mm:ss"},
+"Error" : error.description,
+"ErrorType_NameSpace" : error.errorType.namespace,
+"ErrorType_Identifier" : error.errorType.identifier,
+"Http_Status_Code" : vars.httpStatus,
+"In_payload" : vars.setInputVariable default ""
+
+
 }]]></ee:set-payload>
-				</ee:message>
-			</ee:transform>
-		</on-error-propagate>
-	</error-handler>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="httpStatus" ><![CDATA[vars.httpStatus default 500]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<set-variable value="#[payload]" doc:name="errorObject" doc:id="7355ea60-5949-4300-9055-e9b737882b99" variableName="errorObject"/>
+		<db:insert doc:name="Insert" doc:id="69462da1-3896-45b1-b947-8c4de952eddd" config-ref="Global-MySql-DB">
+			<db:sql><![CDATA[INSERT INTO error(Transaction_Name, Transaction_Time, Error,ErrorType_NameSpace, ErrorType_Identifier,
+ Http_Status_Code,In_payload)
+VALUES (:Transaction_Name, :Transaction_Time, :Error,:ErrorType_NameSpace, :ErrorType_Identifier,
+ :Http_Status_Code,:In_payload)]]></db:sql>
+			<db:input-parameters><![CDATA[#[{
+Transaction_Name : vars.errorObject.Transaction_Name, 
+Transaction_Time : vars.errorObject.Transaction_Time, 
+Error : vars.errorObject.Error,
+ErrorType_NameSpace : vars.errorObject.ErrorType_NameSpace , 
+ErrorType_Identifier : vars.errorObject.ErrorType_Identifier,
+Http_Status_Code : vars.errorObject.Http_Status_Code,
+In_payload : vars.errorObject.In_payload
+}]]]></db:input-parameters>
+		</db:insert>
+		<set-payload value="#[vars.errorObject]" doc:name="Set Payload" doc:id="90a30c97-2ba2-428f-993c-8daa22cdfc4f" />
+		<error-handler>
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="770318e7-9298-48e8-bc66-90fef4453a56" >
+				<vm:publish doc:name="Publish" doc:id="15d68460-d294-4001-9f3c-a6d4325aac23" config-ref="VM_Config" queueName="store-error-description">
+					<vm:content ><![CDATA[#[vars.errorObject]]]></vm:content>
+				</vm:publish>
+				<set-payload value="#[vars.errorObject]" doc:name="Set Payload" doc:id="d7b00c2d-1cfc-4887-9671-c97f12f4874e" />
+			</on-error-propagate>
+		</error-handler>
+	</flow>
 </mule>

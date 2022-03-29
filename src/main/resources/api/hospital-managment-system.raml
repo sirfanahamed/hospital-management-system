@@ -1,6 +1,6 @@
 #%RAML 1.0
 title: Hospital Managment System
-description: This Project is the design of Hospital Managment Api's 
+description: This Project is the design of Hospital Managment Api's in which hospitals can register themeslves for patient services 
 baseUri: www.hms.com
 traits:
   error_traits : !include HMS_traits/errorcodes.raml
@@ -18,9 +18,11 @@ resourceTypes:
        
 
 /hospital:
-   /registerhospital:  
+   /registerhospital: 
+    description: /registerhospital is an API service provided for the Hospital Registration  
     post:
     type:
+   
      rest_methods : {
       post_input : registerhospital_data_type,
       post-request-example : !include HMS_req_resp_examples/register_hospital_req_example.json,
@@ -37,10 +39,9 @@ resourceTypes:
        
      /deregisterhospital:
       delete:
+       description: /registerhospital is an API service provided for the Hospital         De-Registration  
        queryParameters: 
-        password :
-         type: string
-         required: true  
+          
             
       type:
           rest_methods : {delete-response-example: {"message" : "Hospital Deregistered"} } 
@@ -50,6 +51,7 @@ resourceTypes:
      
      /admitpatient:
       post:
+      description: /admitpatient is an API service provided for the Hospital to Register the Patient   
       type:
         rest_methods : {
           post_input : registerpatient_data_type,
@@ -60,6 +62,7 @@ resourceTypes:
       is:
           - error_traits  
      /dischargepatient/{pid}:
+       description: /dischargepatient is an API service provided for the Hospital to Update the Patient Admitted Status to Discharge  
        uriParameters:
         pid_uri_parameter_data_type
 
@@ -79,16 +82,18 @@ resourceTypes:
 
      /getallpatientsinfo:
        get:
+       description: /getallpatients is an API service provided for the Hospital to get the information of all the Patients Registered to the Hospital  
        type:
         rest_methods : {
           get-response-example: !include HMS_req_resp_examples/get_all_patients_resp_example.json
         }
-        is:
+       is:
         - error_traits
          
 
                     
      /getpatientinfo/{pid}:
+       description: /getpatientinfo is an API service provided for the Hospital to get the information of the particular Patients Registered to the Hospital 
        uriParameters:
         pid_uri_parameter_data_type
        get:
@@ -100,6 +105,7 @@ resourceTypes:
         - error_traits
   
      /updatepatientinfo/{pid}:
+       description: /updatepatientinfo is an API service provided for the Hospital to update the information of the Patients Registered to the Hospital 
        uriParameters:
          pid_uri_parameter_data_type
        put:
@@ -115,28 +121,34 @@ resourceTypes:
 
      /hospitalstats:
        get:
+       description: /hospitalstats is an API service provided for the Hospital to view the information of admitted , discharge and total patient count on current day     
        type:
         rest_methods : {
           get-response-example: !include HMS_req_resp_examples/hospital_stats_resp.json
         }
-        is:
+       is:
         - error_traits         
 
 /patient:  
  /searchhospital:
    get:
+     description: /searchhospital is an API service provided for the Patients to search for the information of all Registered Hospital based on Name,Area,City of the hospitals
      queryParameters:
       Name?: string
       Area? : string
       City? : string
+      
+        
    type:
         rest_methods : {
           get-response-example: !include HMS_req_resp_examples/search_hospital_response.json
         }
-        is:
+   is:
         - error_traits 
+  
    /sortbybeds:     
      get:
+      description: /sortbybeds is an API service provided for the Patients to Sort the hospitals based on Beds Availability
       queryParameters:
        sortbybeds: 
         enum:
@@ -152,6 +164,7 @@ resourceTypes:
         
  
  /{hid}/update/{pid}:
+   description: /update/{pid} is an API service provided for the Patients to Update their personal Information like Name,Address, gender etc..
    uriParameters:
      pid_uri_parameter_data_type
      hid_uri_parameter_data_type

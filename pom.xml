@@ -16,12 +16,10 @@
 		<app.runtime>4.4.0</app.runtime>
 		<mule.maven.plugin.version>3.5.2</mule.maven.plugin.version>
 		<munit.version>2.3.6</munit.version>
-		
 	</properties>
 
 	<build>
 		<plugins>
-		
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-clean-plugin</artifactId>
@@ -40,14 +38,14 @@
 						</sharedLibrary>
 					</sharedLibraries>
 					<cloudHubDeployment>
-					<username>100503</username>
-					<password>Irfan..ii1</password>
-					<environment>Sandbox</environment>
-					<workers>1</workers>
-					<workerType>Micro</workerType>
-					<applicationName>hms-api</applicationName>
-					<muleVersion>4.4.0</muleVersion>
-					<objectStoreV2>true</objectStoreV2> 
+						<username>100503</username>
+						<password>Irfan..ii1</password>
+						<environment>Sandbox</environment>
+						<workers>1</workers>
+						<workerType>Micro</workerType>
+						<applicationName>hms-api</applicationName>
+						<muleVersion>4.4.0</muleVersion>
+						<objectStoreV2>true</objectStoreV2>
 					</cloudHubDeployment>
 				</configuration>
 			</plugin>
@@ -127,6 +125,12 @@
 			<version>1.0.2</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.mule.connectors</groupId>
+			<artifactId>mule-vm-connector</artifactId>
+			<version>2.0.0</version>
+			<classifier>mule-plugin</classifier>
+		</dependency>
 	</dependencies>
 
 	<repositories>
@@ -142,8 +146,6 @@
 			<url>https://repository.mulesoft.org/releases/</url>
 			<layout>default</layout>
 		</repository>
-		
-    
 	</repositories>
 
 	<pluginRepositories>
@@ -158,11 +160,11 @@
 		</pluginRepository>
 	</pluginRepositories>
 	<distributionManagement>
-       <repository>
-         <id>internal.repo</id>
-         <name>Internal repo</name>
-         <url>file:///home/thara/testesb/in</url>
-       </repository>
-   </distributionManagement>
+		<repository>
+			<id>internal.repo</id>
+			<name>Internal repo</name>
+			<url>file:///home/thara/testesb/in</url>
+		</repository>
+	</distributionManagement>
 
 </project>

@@ -21,86 +21,7 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
             </http:error-response>
         </http:listener>
         <apikit:router config-ref="hospital-managment-system-config" />
-        <error-handler>
-            <on-error-propagate type="APIKIT:BAD_REQUEST">
-                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-                    <ee:message>
-                        <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{message: "Bad request"}]]></ee:set-payload>
-                    </ee:message>
-                    <ee:variables>
-                        <ee:set-variable variableName="httpStatus">400</ee:set-variable>
-                    </ee:variables>
-                </ee:transform>
-            </on-error-propagate>
-            <on-error-propagate type="APIKIT:NOT_FOUND">
-                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-                    <ee:message>
-                        <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{message: "Resource not found"}]]></ee:set-payload>
-                    </ee:message>
-                    <ee:variables>
-                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
-                    </ee:variables>
-                </ee:transform>
-            </on-error-propagate>
-            <on-error-propagate type="APIKIT:METHOD_NOT_ALLOWED">
-                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-                    <ee:message>
-                        <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{message: "Method not allowed"}]]></ee:set-payload>
-                    </ee:message>
-                    <ee:variables>
-                        <ee:set-variable variableName="httpStatus">405</ee:set-variable>
-                    </ee:variables>
-                </ee:transform>
-            </on-error-propagate>
-            <on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
-                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-                    <ee:message>
-                        <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{message: "Not acceptable"}]]></ee:set-payload>
-                    </ee:message>
-                    <ee:variables>
-                        <ee:set-variable variableName="httpStatus">406</ee:set-variable>
-                    </ee:variables>
-                </ee:transform>
-            </on-error-propagate>
-            <on-error-propagate type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
-                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-                    <ee:message>
-                        <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{message: "Unsupported media type"}]]></ee:set-payload>
-                    </ee:message>
-                    <ee:variables>
-                        <ee:set-variable variableName="httpStatus">415</ee:set-variable>
-                    </ee:variables>
-                </ee:transform>
-            </on-error-propagate>
-            <on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
-                <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-                    <ee:message>
-                        <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{message: "Not Implemented"}]]></ee:set-payload>
-                    </ee:message>
-                    <ee:variables>
-                        <ee:set-variable variableName="httpStatus">501</ee:set-variable>
-                    </ee:variables>
-                </ee:transform>
-            </on-error-propagate>
-        </error-handler>
+		<error-handler ref="common-errorsError_Handler" />
     </flow>
     <flow name="hospital-managment-system-console">
         <http:listener config-ref="hospital-managment-system-httpListenerConfig" path="/console/*">
@@ -130,12 +51,34 @@ output application/json
         </error-handler>
     </flow>
     <flow name="delete:\hospital\(hid)\deregisterhospital:hospital-managment-system-config">
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">
-            <ee:variables>
-                <ee:set-variable variableName="hid">attributes.uriParams.'hid'</ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+        <flow-ref doc:name="Validate-Hospital_Id-Patient-Id-in-DB" doc:id="d5a36d58-6d39-49bc-8f54-5c04172781d6" name="Validate-Hospital_Id-Patient-Id-in-DB"/>
+		<choice doc:name="deregister-if-hospital-is-available" doc:id="ecf91121-6097-45ec-8139-fc01131ba2d3" >
+			<when expression="#[vars.hospitalInfoVariable != []]">
+				<try doc:name="Try" doc:id="86f13b09-e420-4a7f-9b1c-036aa5d93b6b" transactionalAction="ALWAYS_BEGIN">
+					<db:select doc:name="Select-patientInfo-from-db" doc:id="5d2aed6b-fdba-4fcd-b2c9-59264d0c3ba3" config-ref="Global-MySql-DB">
+					<db:sql><![CDATA[select * from patient where hospitalPhoneNo = :hospitalPhoneNo]]></db:sql>
+					<db:input-parameters><![CDATA[#[{
+	"hospitalPhoneNo" : vars.hospitalInfoVariable[0].hospitalPhoneNo
+}]]]></db:input-parameters>
+				</db:select>
+					<ee:transform doc:name="Transform-payload-to-JSON" doc:id="a73b424e-1bf8-469b-98a6-e52fcb29f782">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+					<db:bulk-delete doc:name="Bulk delete-from-patient-table-registerd-to-hospital" doc:id="f31e988a-d03b-472d-a6fa-8c3c7794d40c" config-ref="Global-MySql-DB">
+					<db:sql><![CDATA[delete from patient where hospitalPhoneNo = :hospitalPhoneNo]]></db:sql>
+				</db:bulk-delete>
+					<db:delete doc:name="Delete-hospital-form-hospital-table" doc:id="2ae44a3c-ddfc-4d06-b753-4615fc9372da" config-ref="Global-MySql-DB" >
+						<db:sql ><![CDATA[delete from hospital where hospitalPhoneNo = :hospitalPhoneNo]]></db:sql>
+						<db:input-parameters ><![CDATA[#[{
+	hospitalPhoneNo : vars.hospitalInfoVariable[0].hospitalPhoneNo
+}]]]></db:input-parameters>
+					</db:delete>
+					<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:name='Success-message'>
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -145,15 +88,30 @@ output application/json
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
+				</try>
+			</when>
+			<otherwise >
+				<ee:transform doc:name="Failure-Message" doc:id="77394d5c-67bf-40ed-9c5f-66116209e652" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+
+	payload.Message
+]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</otherwise>
+		</choice>
     </flow>
 	<flow name="getHostpitalInfo" doc:id="dab1c127-c240-4b63-8e68-2de07e215489" >
-		<db:select doc:name="Select" doc:id="81192f55-9f3b-4af1-a0fc-4b05dd5cdca2" config-ref="Global-MySql-DB">
+		<db:select doc:name="Select-Hospital_Info-matching-uriParam-hid" doc:id="81192f55-9f3b-4af1-a0fc-4b05dd5cdca2" config-ref="Global-MySql-DB">
 					<db:sql><![CDATA[select * from hospital where hospitalPhoneNo = :hospitalPhoneNo]]></db:sql>
 					<db:input-parameters><![CDATA[#[{
 	 hospitalPhoneNo : vars.hidVariable
 }]]]></db:input-parameters>
 				</db:select>
-		<ee:transform doc:name="Transform Message" doc:id="148a844c-c970-44ec-bc75-356362d8b2c4">
+		<ee:transform doc:name="Transform Message-to-JSON" doc:id="148a844c-c970-44ec-bc75-356362d8b2c4">
 					<ee:message>
 						<ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -163,13 +121,13 @@ payload]]></ee:set-payload>
 				</ee:transform>
 	</flow>
 	<flow name="getPatientInfo" doc:id="c0dc7bee-4f39-44d1-ba46-e10357a96d1d" >
-		<db:select doc:name="Select" doc:id="37b5a13b-bfba-4b0f-bdfb-2d7166e5ac17" config-ref="Global-MySql-DB">
+		<db:select doc:name="Select-Patient_Info-matching-uriParam-pid" doc:id="37b5a13b-bfba-4b0f-bdfb-2d7166e5ac17" config-ref="Global-MySql-DB">
 			<db:sql><![CDATA[select * from patient where patientPhoneNo = :patientPhoneNo]]></db:sql>
 			<db:input-parameters><![CDATA[#[{
 	patientPhoneNo : vars.pidVariable
 }]]]></db:input-parameters>
 		</db:select>
-		<ee:transform doc:name="Transform Message" doc:id="3eb7ff4a-7954-4770-aa41-83ed85a9229d">
+		<ee:transform doc:name="Transform Message-to-JSON" doc:id="3eb7ff4a-7954-4770-aa41-83ed85a9229d">
 					<ee:message>
 						<ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -178,8 +136,8 @@ payload]]></ee:set-payload>
 					</ee:message>
 				</ee:transform>
 	</flow>
-	<flow name="hospital-managment-systemFlow" doc:id="dbbe195d-d92e-4e11-85e8-b88bbc0c16e5" >
-		<ee:transform doc:name="Transform Message" doc:id="84c6572a-4de8-4f8b-ae69-6ff6b5b75cb7" >
+	<flow name="Validate-Hospital_Id-Patient-Id-in-DB" doc:id="dbbe195d-d92e-4e11-85e8-b88bbc0c16e5" >
+		<ee:transform doc:name="Set-hidVariable-and-pidVariable" doc:id="84c6572a-4de8-4f8b-ae69-6ff6b5b75cb7" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
@@ -199,20 +157,20 @@ output application/json
 ---
 
 if((attributes.uriParams.pid)  != null ) attributes.uriParams.pid as Number
-else if  (vars.setInputVariable.PhoneNumber != null ) vars.setInputVariable.PhoneNumber as Number
+else if  (vars.setInputVariable.PhoneNumber != null  ) vars.setInputVariable.PhoneNumber as Number
 else 0 as Number]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<flow-ref doc:name="Flow Reference" doc:id="a369f309-5510-4fa0-9788-9141f616e110" name="getHostpitalInfo" target="hospitalInfoVariable"/>
-		<flow-ref doc:name="Flow Reference" doc:id="fcce3be5-ad24-4856-8d2e-61f75a4832db" name="getPatientInfo" target="patientInfoVariable"/>
-		<choice doc:name="Choice" doc:id="2dd1ad8c-12ca-4d57-9b09-fff49268845b" >
+		<flow-ref doc:name="getHostpitalInfo" doc:id="a369f309-5510-4fa0-9788-9141f616e110" name="getHostpitalInfo" target="hospitalInfoVariable" />
+		<flow-ref doc:name="getPatientInfo" doc:id="fcce3be5-ad24-4856-8d2e-61f75a4832db" name="getPatientInfo" target="patientInfoVariable" />
+		<choice doc:name="If-Hospital_info-exist-in-DB" doc:id="2dd1ad8c-12ca-4d57-9b09-fff49268845b" >
 			<when expression='#[vars.hospitalInfoVariable[0].hospitalPhoneNo == vars.hidVariable as Number]'>
-				<choice doc:name="Choice" doc:id="96665772-0059-4879-8f10-82341a237827" >
+				<choice doc:name="If-Patient-info-exisit-in-DB" doc:id="96665772-0059-4879-8f10-82341a237827" >
 					<when expression='#[vars.patientInfoVariable[0].patientPhoneNo  == vars.pidVariable as Number]'>
 						<logger level="INFO" doc:name="Logger" doc:id="a0660a6f-ed87-4262-bf4e-3b2fc72ae67d" message="#[payload]"/>
 					</when>
 					<otherwise >
-						<ee:transform doc:name="Transform Message" doc:id="d88ced2b-a6fd-4e87-8517-6fc886d41e99">
+						<ee:transform doc:name='Patient-Not-found-Message' doc:id="d88ced2b-a6fd-4e87-8517-6fc886d41e99">
 							<ee:message>
 								<ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -224,7 +182,7 @@ output application/json
 				</choice>
 			</when>
 			<otherwise >
-				<ee:transform doc:name="Transform Message" doc:id="c421eed4-31b8-4d73-b1ae-de3810b33142" >
+				<ee:transform doc:name="Hospital-Not-found-Message" doc:id="c421eed4-31b8-4d73-b1ae-de3810b33142" >
 					<ee:message >
 						<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
@@ -238,7 +196,7 @@ output application/json
 		</choice>
 	</flow>
 	<flow name="patch:\hospital\(hid)\dischargepatient\(pid):application\json:hospital-managment-system-config">
-        <ee:transform doc:name="Transform Message" doc:id="55b54417-423c-4a0b-9bd8-0f579da3b1e4">
+        <ee:transform doc:name='Input-Status:"Discharged"' doc:id="55b54417-423c-4a0b-9bd8-0f579da3b1e4">
 			<ee:message>
 				<ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -250,10 +208,11 @@ output application/json
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
-		<flow-ref doc:name="Flow Reference" doc:id="b0510e12-c33b-4981-a522-d7142ce0681e" name="hospital-managment-systemFlow"/>
-		<choice doc:name="Choice" doc:id="55f7927e-d999-4c4b-b667-3168305d1bca">
+		<flow-ref doc:name="Validate-Hospital_Id-Patient-Id-in-DB" doc:id="b0510e12-c33b-4981-a522-d7142ce0681e" name="Validate-Hospital_Id-Patient-Id-in-DB"/>
+		<choice doc:name="if-patient-is-admitted" doc:id="55f7927e-d999-4c4b-b667-3168305d1bca">
 			<when expression="#[vars.patientInfoVariable[0].patientStatus == 'admitted' and vars.patientInfoVariable[0].hospitalPhoneNo == vars.hospitalInfoVariable[0].hospitalPhoneNo]">
-				<db:update doc:name="Update" doc:id="490e283e-64f8-4707-9f52-5616cd4a50c2" config-ref="Global-MySql-DB">
+				<try doc:name="Try" doc:id="439fb968-3dc5-4d77-8654-5d586f0b007e" transactionalAction="ALWAYS_BEGIN">
+					<db:update doc:name="Update-Patient-Status-to-Discharged-in-patient-table" doc:id="490e283e-64f8-4707-9f52-5616cd4a50c2" config-ref="Global-MySql-DB">
 			<db:sql><![CDATA[UPDATE patient SET 
 patientStatus = :patientStatus,
 patientDischargeDate = :patientDischargeDate
@@ -267,14 +226,14 @@ WHERE patientPhoneNo = :patientPhoneNumber and hospitalPhoneNo = :hospitalPhoneN
 
 }]]]></db:input-parameters>
 		</db:update>
-				<db:update doc:name="Update" doc:id="5a901f9c-4aa5-42d1-97e2-ad7cd41e298d" config-ref="Global-MySql-DB">
-					<db:sql ><![CDATA[UPDATE hospital SET hospitalAvailableBeds = :hospitalAvailableBeds WHERE hospitalPhoneNo = :hospitalPhoneNo ]]></db:sql>
-					<db:input-parameters ><![CDATA[#[{
+					<db:update doc:name="Update-Available-Beds-in-hospital-table" doc:id="5a901f9c-4aa5-42d1-97e2-ad7cd41e298d" config-ref="Global-MySql-DB">
+					<db:sql><![CDATA[UPDATE hospital SET hospitalAvailableBeds = :hospitalAvailableBeds WHERE hospitalPhoneNo = :hospitalPhoneNo ]]></db:sql>
+					<db:input-parameters><![CDATA[#[{
 	"hospitalAvailableBeds" : (vars.hospitalInfoVariable[0].hospitalAvailableBeds as Number) + 1 ,
 		"hospitalPhoneNo" : vars.patientInfoVariable[0].hospitalPhoneNo
 }]]]></db:input-parameters>
 				</db:update>
-				<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+					<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:name="Success-message">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -284,9 +243,10 @@ output application/json
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
+				</try>
 			</when>
 			<otherwise>
-						<ee:transform doc:name="Transform Message" doc:id="d21f3b6b-04ab-47f0-8e74-97c3fa1a3577">
+						<ee:transform doc:name="Failure-message" doc:id="d21f3b6b-04ab-47f0-8e74-97c3fa1a3577">
 					<ee:message>
 						<ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -306,10 +266,10 @@ else if((vars.patientInfoVariable[0].patientStatus == 'admitted'
     </flow>
     <flow name="put:\hospital\(hid)\updatepatientinfo\(pid):application\json:hospital-managment-system-config">
 		<set-variable value="#[payload]" doc:name="setInputVariable" doc:id="634d205b-8f10-4f0d-b06d-54fa75c2984f" variableName="setInputVariable"/>
-		<flow-ref doc:name="Flow Reference" doc:id="7720748a-51e9-47c1-88c4-a201a350e6cf" name="hospital-managment-systemFlow"/>
-		<choice doc:name="Choice" doc:id="715901b5-e8ab-46c3-8244-8f6adad84fed" >
+		<flow-ref doc:name="Validate-Hospital_Id-Patient-Id-in-DB" doc:id="7720748a-51e9-47c1-88c4-a201a350e6cf" name="Validate-Hospital_Id-Patient-Id-in-DB"/>
+		<choice doc:name="If-patient-exist-in DB-new-information-to-upadte" doc:id="715901b5-e8ab-46c3-8244-8f6adad84fed" >
 			<when expression="#[payload.Message == null and vars.setInputVariable != {}]">
-				<db:update doc:name="Update" doc:id="dd1a5b13-5eb5-469d-b727-a929d5133188" config-ref="Global-MySql-DB">
+				<db:update doc:name="Update-Patient-Info-in-patient-table" doc:id="dd1a5b13-5eb5-469d-b727-a929d5133188" config-ref="Global-MySql-DB">
 					<db:sql><![CDATA[UPDATE patient SET 
 patientBloodType = :patientBloodType,
 patientHeight = :patientHeight,
@@ -328,7 +288,7 @@ WHERE patientPhoneNo = :patientPhoneNo AND hospitalPhoneNo = :hospitalPhoneNo]]>
 
 }]]]></db:input-parameters>
 				</db:update>
-				<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+				<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:name="Success-Message">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -344,7 +304,7 @@ else{
         </ee:transform>
 			</when>
 			<otherwise>
-				<ee:transform doc:name="Transform Message" doc:id="424a6a22-97b4-4e71-a54f-516bded1b248">
+				<ee:transform doc:name="Failure-Message" doc:id="424a6a22-97b4-4e71-a54f-516bded1b248">
 							<ee:message>
 								<ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -361,10 +321,10 @@ if(payload.Message == null and vars.setInputVariable == {})
     </flow>
     <flow name="put:\patient\(hid)\update\(pid):application\json:hospital-managment-system-config">
 		<set-variable value="#[payload]" doc:name="setInputVariable" doc:id="90654fcf-3cbb-4aac-8cbb-0ea547b94c10" variableName="setInputVariable"/>
-		<flow-ref doc:name="Flow Reference" doc:id="65d8639b-5ed2-4f0c-ab1b-ab189190c2e1" name="hospital-managment-systemFlow"/>
-		<choice doc:name="Choice" doc:id="a08aa345-4dd8-4e4e-b0b3-85da9f1dcde0" >
+		<flow-ref doc:name="Validate-Hospital_Id-Patient-Id-in-DB" doc:id="65d8639b-5ed2-4f0c-ab1b-ab189190c2e1" name="Validate-Hospital_Id-Patient-Id-in-DB"/>
+		<choice doc:name="If-patient-exist-in DB-and-input-has-new-upadte" doc:id="a08aa345-4dd8-4e4e-b0b3-85da9f1dcde0" >
 			<when expression="#[payload.Message == null and vars.setInputVariable != {}]">
-				<db:update doc:name="Update" doc:id="86c3ff3c-2ca6-4daa-8338-c91982429d57" config-ref="Global-MySql-DB">
+				<db:update doc:name="Update-Patient-Info-in-patient-table" doc:id="86c3ff3c-2ca6-4daa-8338-c91982429d57" config-ref="Global-MySql-DB">
 					<db:sql ><![CDATA[UPDATE patient SET 
 patientName = :patientName,
 patientAddress = :patientAddress,
@@ -381,7 +341,7 @@ WHERE patientPhoneNo = :patientPhoneNo]]></db:sql>
 "patientAddress" : vars.setInputVariable.Address default vars.patientInfoVariable[0].patientAddress
 }]]]></db:input-parameters>
 				</db:update>
-				<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+				<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:name="Success-Message">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -393,7 +353,7 @@ output application/json
         </ee:transform>
 			</when>
 			<otherwise>
-				<ee:transform doc:name="Transform Message" doc:id="7e56043a-7455-450b-aa11-5399fe26090a" >
+				<ee:transform doc:name="Failure-Message" doc:id="7e56043a-7455-450b-aa11-5399fe26090a" >
 					<ee:message >
 						<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
@@ -409,10 +369,10 @@ if(payload.Message == null and vars.setInputVariable == {})
 		</choice>
     </flow>
     <flow name="get:\hospital\(hid)\getallpatientsinfo:hospital-managment-system-config" doc:id="a41762c0-5807-41ed-964c-9865233bc446">
-        <flow-ref doc:name="Flow Reference" doc:id="7ede703f-aeb4-4307-b8ef-a9a4b4ed7d8d" name="hospital-managment-systemFlow"/>
-		<choice doc:name="Choice" doc:id="217f705d-9a56-4a33-96c6-1f3c5510a64e" >
+        <flow-ref doc:name="Validate-Hospital_Id-Patient-Id-in-DB" doc:id="7ede703f-aeb4-4307-b8ef-a9a4b4ed7d8d" name="Validate-Hospital_Id-Patient-Id-in-DB"/>
+		<choice doc:name="If-hospitalInfoVariable-is-not-null" doc:id="217f705d-9a56-4a33-96c6-1f3c5510a64e" >
 			<when expression="#[vars.hospitalInfoVariable != []]">
-				<db:select doc:name="Select" doc:id="685078d2-bc4b-47d2-9605-c79c6d4df7a2" config-ref="Global-MySql-DB">
+				<db:select doc:name="Select-Patient-Info" doc:id="685078d2-bc4b-47d2-9605-c79c6d4df7a2" config-ref="Global-MySql-DB">
 					<db:sql ><![CDATA[select * from patient where hospitalPhoneNo = :hospitalPhoneNo]]></db:sql>
 					<db:input-parameters ><![CDATA[#[{
 	"hospitalPhoneNo" : vars.hospitalInfoVariable[0].hospitalPhoneNo
@@ -420,7 +380,7 @@ if(payload.Message == null and vars.setInputVariable == {})
 				</db:select>
 				<choice doc:name="Choice" doc:id="5938e3b7-fa1a-4173-9ab9-5a0b317642e8" >
 					<when expression="#[sizeOf(payload)&gt;=1]">
-						<ee:transform doc:name="Transform Message" doc:id="796b437a-f05c-4c92-a675-c8c7a48e3019" >
+						<ee:transform doc:name="Success-Message" doc:id="796b437a-f05c-4c92-a675-c8c7a48e3019" >
 							<ee:message >
 								<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
@@ -430,7 +390,7 @@ payload]]></ee:set-payload>
 						</ee:transform>
 					</when>
 					<otherwise>
-						<ee:transform doc:name="Transform Message" doc:id="2fb3752c-df23-4836-96f8-5ef97aa3cd98" >
+						<ee:transform doc:name="Failure-message" doc:id="2fb3752c-df23-4836-96f8-5ef97aa3cd98" >
 							<ee:message >
 								<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
@@ -444,7 +404,7 @@ output application/json
 				</choice>
 			</when>
 			<otherwise>
-				<ee:transform doc:name="Transform Message" doc:id="51270306-f4cf-48d0-afce-a148f12343e3">
+				<ee:transform doc:name="Failure-Message" doc:id="51270306-f4cf-48d0-afce-a148f12343e3">
 					<ee:message>
 						<ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -456,7 +416,7 @@ payload.Message]]></ee:set-payload>
 		</choice>
     </flow>
     <flow name="get:\hospital\(hid)\getpatientinfo\(pid):hospital-managment-system-config">
-        <flow-ref doc:name="Flow Reference" doc:id="2a079ce1-dbc0-4cf2-a019-5bfa75ef953b" name="hospital-managment-systemFlow"/>
+        <flow-ref doc:name="Validate-Hospital_Id-Patient-Id-in-DB" doc:id="2a079ce1-dbc0-4cf2-a019-5bfa75ef953b" name="Validate-Hospital_Id-Patient-Id-in-DB"/>
 		<choice doc:name="Choice" doc:id="686d0de5-5c52-492f-a2ad-134c5eb33f2c" >
 			<when expression="#[vars.patientInfoVariable != [] and vars.hospitalInfoVariable != [] and vars.patientInfoVariable[0].hospitalPhoneNo == vars.hospitalInfoVariable[0].hospitalPhoneNo]">
 				<ee:transform doc:name="Transform Message" doc:id="3852c4aa-6378-42d2-81b2-27a289667cea" >
@@ -488,7 +448,7 @@ else payload.Message
     <flow name="get:\hospital\(hid)\hospitalstats:hospital-managment-system-config">
         <flow-ref doc:name="getallpatientsinfo" doc:id="d5e36318-9a36-4ff7-a3ac-4c10d6c2eec3" name="get:\hospital\(hid)\getallpatientsinfo:hospital-managment-system-config" target="totalNumberOfPatients"/>
 		<choice doc:name="Choice" doc:id="7063caf0-1023-4807-b504-c69a0f16c5d7" >
-			<when expression='#[typeOf(vars.totalNumberOfPatients) as String == "Array"]'>
+			<when expression='#[typeOf(vars.totalNumberOfPatients)as String == "Array"]'>
 				<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
@@ -558,11 +518,11 @@ if(payload !=[])payload else {
         </ee:transform>
     </flow>
     <flow name="get:\patient\searchhospital\sortbybeds:hospital-managment-system-config">
-		<set-variable value="#[attributes.queryParams.sortbybeds]" doc:name="Set Variable" doc:id="483d8b7f-48f7-4bb8-8df0-4f1e4b11e96f" variableName="setInputVariable"/>
-		<db:select doc:name="Select" doc:id="1a681bf4-2cb4-4511-bb87-4ca55d3fb54b" config-ref="Global-MySql-DB">
+		<set-variable value="#[attributes.queryParams.sortbybeds]" doc:name="setInputVariable" doc:id="483d8b7f-48f7-4bb8-8df0-4f1e4b11e96f" variableName="setInputVariable"/>
+		<db:select doc:name="select all from hospital" doc:id="1a681bf4-2cb4-4511-bb87-4ca55d3fb54b" config-ref="Global-MySql-DB">
 			<db:sql ><![CDATA[select * from hospital]]></db:sql>
 		</db:select>
-		<ee:transform doc:name="Transform Message" doc:id="204dc9b1-e9f2-4afd-8e9e-7b0504a50792" >
+		<ee:transform doc:name="Transform Message-to-JSON" doc:id="204dc9b1-e9f2-4afd-8e9e-7b0504a50792" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
@@ -570,9 +530,9 @@ output application/json
 payload]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
-		<choice doc:name="Choice" doc:id="194cd799-a3b6-4bc3-ac14-5da4ff5e531e" >
-			<when expression='#[(payload !=null) and (vars.setInputVariable as String == "ascending")]'>
-				<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+		<choice doc:name="Sort-by-ascending-descending-else-no-found" doc:id="194cd799-a3b6-4bc3-ac14-5da4ff5e531e" >
+			<when expression='#[(payload !=[]) and (vars.setInputVariable as String == "ascending")]'>
+				<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:name="Success-Message">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -586,8 +546,8 @@ payload orderBy ((item, index) -> item.hospitalAvailableBeds) map (item, index) 
             </ee:message>
         </ee:transform>
 			</when>
-			<when expression='#[(payload !=null) and (vars.setInputVariable as String == "descending")]'>
-				<ee:transform doc:name="Transform Message" doc:id="cd44445c-1567-4238-bf6d-f1f75421e8d1" >
+			<when expression='#[(payload !=[]) and (vars.setInputVariable as String == "descending")]'>
+				<ee:transform doc:name="Success-Message" doc:id="cd44445c-1567-4238-bf6d-f1f75421e8d1" >
 					<ee:message >
 						<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
@@ -603,7 +563,7 @@ payload orderBy ((item, index) -> -item.hospitalAvailableBeds) map (item, index)
 				</ee:transform>
 			</when>
 			<otherwise >
-				<ee:transform doc:name="Transform Message" doc:id="34c5aaf8-2d93-4e5f-858a-4ce8ca245b4a" >
+				<ee:transform doc:name="Failure-message" doc:id="34c5aaf8-2d93-4e5f-858a-4ce8ca245b4a" >
 					<ee:message >
 						<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
@@ -618,10 +578,11 @@ output application/json
     </flow>
     <flow name="post:\hospital\(hid)\admitpatient:application\json:hospital-managment-system-config">
 		<set-variable value="#[payload]" doc:name="setInputVariable" doc:id="6c0e36f1-3aae-4f8a-9967-2a256ed42527" variableName="setInputVariable"/>
-		<flow-ref doc:name="hospital-managment-systemFlow" doc:id="17bb35b7-49d8-4ad9-a5b8-42b4d448ebd4" name="hospital-managment-systemFlow"/>
-		<choice doc:name="Choice" doc:id="b825b7cf-f012-4e9d-8e3d-8f7d967a35e8">
-			<when expression='#[payload.Message == "Patient Not found"]'>
-				<db:insert doc:name="Insert" doc:id="101348a4-ddd6-4cf8-8628-fe375002e672" config-ref="Global-MySql-DB">
+		<flow-ref doc:name="hospital-managment-systemFlow" doc:id="17bb35b7-49d8-4ad9-a5b8-42b4d448ebd4" name="Validate-Hospital_Id-Patient-Id-in-DB"/>
+		<choice doc:name="If-hospital-not-exist" doc:id="b825b7cf-f012-4e9d-8e3d-8f7d967a35e8">
+			<when expression='#[vars.patientInfoVariable == [] and vars.hospitalInfoVariable !=[]]'>
+				<try doc:name="Try" doc:id="009880d1-65da-426e-a6f9-a374ae59d4c6" >
+					<db:insert doc:name="Insert-new-patient-into-patient-table" doc:id="101348a4-ddd6-4cf8-8628-fe375002e672" config-ref="Global-MySql-DB">
 			<db:sql><![CDATA[INSERT INTO patient(patientName,patientAddress,patientAge,patientGender,patientPhoneNo,
 patientEmail,patientBloodType,patientHeight,patientWeight,patientDisease,patientMedicalDetails,
 patientAdmitDate,patientDischargeDate,patientStatus,hospitalPhoneNo)
@@ -661,14 +622,14 @@ patientStatus : "admitted",
 hospitalPhoneNo : attributes.uriParams.hid as Number
 }]]]></db:input-parameters>
 		</db:insert>
-				<db:update doc:name="Update" doc:id="9c02888f-6cd3-4a19-b7e9-151a65221955" config-ref="Global-MySql-DB">
+					<db:update doc:name="Update-Available-Beds-in-hospital-table" doc:id="9c02888f-6cd3-4a19-b7e9-151a65221955" config-ref="Global-MySql-DB">
 			<db:sql><![CDATA[UPDATE hospital SET hospitalAvailableBeds = :hospitalAvailableBeds WHERE hospitalPhoneNo = :hospitalPhoneNo ]]></db:sql>
 			<db:input-parameters><![CDATA[#[{
 	"hospitalAvailableBeds" : (vars.hospitalInfoVariable[0].hospitalAvailableBeds as Number) - 1 ,
 		"hospitalPhoneNo" : vars.hospitalInfoVariable[0].hospitalPhoneNo
 }]]]></db:input-parameters>
 		</db:update>
-				<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+					<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:name="Success-message">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -678,27 +639,27 @@ output application/json
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
+				</try>
 			</when>
 			<otherwise>
-				<ee:transform doc:name="Transform Message" doc:id="e741a69f-5cbf-47ee-8a5f-5cab9b15eadd">
+				<ee:transform doc:name="Failure-Message" doc:id="e741a69f-5cbf-47ee-8a5f-5cab9b15eadd">
 					<ee:message>
 						<ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
-{
- 	 Message: "Patient has already registerd " 
-}]]></ee:set-payload>
+if(vars.patientInfoVariable !=[]) "Patient Already Exist" 
+else payload.Message]]></ee:set-payload>
 					</ee:message>
 				</ee:transform>
 			</otherwise>
 		</choice>
     </flow>
     <flow name="post:\hospital\registerhospital:application\json:hospital-managment-system-config">
-        <set-variable value="#[payload]" doc:name="Set Variable" doc:id="34a5ecbb-34dd-490b-be35-eafd56cdd97f" variableName="setInputVariable"/>
-		<flow-ref doc:name="Flow Reference" doc:id="fe0ec212-9cb6-4b3e-911b-aee7d61f8175" name="hospital-managment-systemFlow"/>
-		<choice doc:name="Choice" doc:id="7e0e196f-039a-4293-8676-447e9544b90a" >
-			<when expression='#[payload.Message == "Hospital is not Registered.."]'>
-				<db:insert doc:name="Insert" doc:id="88780f1d-6245-49bf-bf13-ec833d19c33b" config-ref="Global-MySql-DB">
+		<set-variable value="#[payload]" doc:name="setInputVariable" doc:id="34a5ecbb-34dd-490b-be35-eafd56cdd97f" variableName="setInputVariable"/>
+		<flow-ref doc:name="Validate-Hospital_Id-Patient-Id-in-DB" doc:id="fe0ec212-9cb6-4b3e-911b-aee7d61f8175" name="Validate-Hospital_Id-Patient-Id-in-DB"/>
+		<choice doc:name="If-hospital-not-exist" doc:id="7e0e196f-039a-4293-8676-447e9544b90a" >
+			<when expression='#[vars.hospitalInfoVariable == []]'>
+				<db:insert doc:name="Insert-new-hospital-into-hospital-table" doc:id="88780f1d-6245-49bf-bf13-ec833d19c33b" config-ref="Global-MySql-DB">
 			<db:sql><![CDATA[INSERT INTO hospital(hospitalName, hospitalArea, hospitalCity,hospitalState, hospitalCountry,
  hospitalPin,hospitalEmail,hospitalTotalBeds,hospitalAvailableBeds,hospitalPhoneNo)
 VALUES (:hospitalName, :hospitalArea, :hospitalCity,:hospitalState, :hospitalCountry,
@@ -718,7 +679,7 @@ VALUES (:hospitalName, :hospitalArea, :hospitalCity,:hospitalState, :hospitalCou
 	
 }]]]></db:input-parameters>
 		</db:insert>
-				<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+				<ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:name="Success-Message">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -730,7 +691,7 @@ output application/json
         </ee:transform>
 			</when>
 			<otherwise >
-				<ee:transform doc:name="Transform Message" doc:id="73a8584e-722a-46a8-817c-aafe3edb402e" >
+				<ee:transform doc:name="Failure-Message" doc:id="73a8584e-722a-46a8-817c-aafe3edb402e" >
 					<ee:message >
 						<ee:set-payload ><![CDATA[%dw 2.0
 output application/json

@@ -782,33 +782,6 @@ assert_expression_payload::main({payload: payload, attributes: attributes, vars:
 			</munit-tools:assert>
 		</munit:validation>
 	</munit:test>
-	<munit:test name="patch:\hospital\(hid)\dischargepatient\(pid)-NOT-FOUND" doc:id="d6b68f7d-1d1c-4c76-91a4-946db27a03d7" >
-		<munit:behavior >
-			<munit:set-event doc:name="Set Input" doc:id="f56c3ff6-c2ec-4d5b-963b-5243b5c15e4b" >
-				<munit:payload value="#[output application/json --- readUrl('classpath://patchhospitalhiddischargepatientpidNOTFOUND\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
-				<munit:attributes value="#[readUrl('classpath://patchhospitalhiddischargepatientpidNOTFOUND\set-event_attributes.dwl')]" />
-				<munit:variables >
-					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://patchhospitalhiddischargepatientpidNOTFOUND\set-event_variable_.dwl')]" />
-				</munit:variables>
-			</munit:set-event>
-		</munit:behavior>
-		<munit:execution >
-			<flow-ref doc:name="Flow-ref to patch:\hospital\(hid)\dischargepatient\(pid):application\json:hospital-managment-system-config" doc:id="a4345f46-ae93-4b91-98ff-9a8f6a3730c5" name="patch:\hospital\(hid)\dischargepatient\(pid):application\json:hospital-managment-system-config"/>
-		</munit:execution>
-		<munit:validation >
-			<munit-tools:assert doc:name="Assert payload" doc:id="a1258324-3da6-4e7b-94f2-9c68d53f9ade" message="The payload does not match">
-				<munit-tools:that ><![CDATA[#[%dw 2.0
-import patchhospitalhiddischargepatientpidNOTFOUND::assert_expression_payload
----
-assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
-			</munit-tools:assert>
-			<munit-tools:verify-call doc:name="Verify Flow Reference" doc:id="4b89590a-abfd-499f-9b52-bd01b1897fef" processor="flow-ref" times="1">
-				<munit-tools:with-attributes >
-					<munit-tools:with-attribute whereValue="b0510e12-c33b-4981-a522-d7142ce0681e" attributeName="doc:id" />
-				</munit-tools:with-attributes>
-			</munit-tools:verify-call>
-		</munit:validation>
-	</munit:test>
 
 
 </mule>
