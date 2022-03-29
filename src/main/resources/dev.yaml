@@ -11,7 +11,7 @@ cloudhub:
  environment : "Sandbox"
  workers : "1"
  workerType : "Micro"
- api_name : "hms_api"
+ api_name : "hms-api"
  version : "4.4.0"
  mule:
   env : "dev" 
