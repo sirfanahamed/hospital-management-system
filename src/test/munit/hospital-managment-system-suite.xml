@@ -782,6 +782,246 @@ assert_expression_payload::main({payload: payload, attributes: attributes, vars:
 			</munit-tools:assert>
 		</munit:validation>
 	</munit:test>
+	<munit:test name="delete:\hospital\(hid)\deregisterhospital-SUCCESS-TEST" doc:id="45d9ef18-73f1-4336-ad3b-74b7104162b3" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Select-patientInfo-from-db" doc:id="55e6afde-2334-482b-b212-2d2af0bee5d5" processor="db:select">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="5d2aed6b-fdba-4fcd-b2c9-59264d0c3ba3" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/java --- readUrl('classpath://deletehospitalhidderegisterhospitalSUCCESSTEST\mock_payload.dwl')]" mediaType="application/java" encoding="UTF-8" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://deletehospitalhidderegisterhospitalSUCCESSTEST\mock_variable_.dwl')]" />
+						<munit-tools:variable key="hospitalInfoVariable" value="#[output application/json --- readUrl('classpath://deletehospitalhidderegisterhospitalSUCCESSTEST\mock_variable_1.dwl')]" mediaType="application/json" encoding="UTF-8" />
+						<munit-tools:variable key="patientInfoVariable" value="#[output application/json --- readUrl('classpath://deletehospitalhidderegisterhospitalSUCCESSTEST\mock_variable_2.dwl')]" mediaType="application/json" encoding="UTF-8" />
+						<munit-tools:variable key="hidVariable" value="#[output application/json --- readUrl('classpath://deletehospitalhidderegisterhospitalSUCCESSTEST\mock_variable_3.dwl')]" mediaType="application/json" encoding="UTF-8" />
+						<munit-tools:variable key="pidVariable" value="#[output application/json --- readUrl('classpath://deletehospitalhidderegisterhospitalSUCCESSTEST\mock_variable_4.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock Validate-Hospital_Id-Patient-Id-in-DB" doc:id="3e57ac90-51e0-4b73-8d65-c1abad04ac44" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="d5a36d58-6d39-49bc-8f54-5c04172781d6" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://deletehospitalhidderegisterhospitalSUCCESSTEST\mock_payload1.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes value="#[readUrl('classpath://deletehospitalhidderegisterhospitalSUCCESSTEST\mock_attributes.dwl')]" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://deletehospitalhidderegisterhospitalSUCCESSTEST\mock_variable_5.dwl')]" />
+						<munit-tools:variable key="hospitalInfoVariable" value="#[output application/json --- readUrl('classpath://deletehospitalhidderegisterhospitalSUCCESSTEST\mock_variable_6.dwl')]" mediaType="application/json" encoding="UTF-8" />
+						<munit-tools:variable key="patientInfoVariable" value="#[output application/json --- readUrl('classpath://deletehospitalhidderegisterhospitalSUCCESSTEST\mock_variable_7.dwl')]" mediaType="application/json" encoding="UTF-8" />
+						<munit-tools:variable key="hidVariable" value="#[output application/json --- readUrl('classpath://deletehospitalhidderegisterhospitalSUCCESSTEST\mock_variable_8.dwl')]" mediaType="application/json" encoding="UTF-8" />
+						<munit-tools:variable key="pidVariable" value="#[output application/json --- readUrl('classpath://deletehospitalhidderegisterhospitalSUCCESSTEST\mock_variable_9.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock Delete-hospital-form-hospital-table" doc:id="d05e4972-e62a-4465-b184-dfc0f7c90fb0" processor="db:delete">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="2ae44a3c-ddfc-4d06-b753-4615fc9372da" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/java --- readUrl('classpath://deletehospitalhidderegisterhospitalSUCCESSTEST\mock_payload2.dwl')]" mediaType="application/java" encoding="UTF-8" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://deletehospitalhidderegisterhospitalSUCCESSTEST\mock_variable_10.dwl')]" />
+						<munit-tools:variable key="hospitalInfoVariable" value="#[output application/json --- readUrl('classpath://deletehospitalhidderegisterhospitalSUCCESSTEST\mock_variable_11.dwl')]" mediaType="application/json" encoding="UTF-8" />
+						<munit-tools:variable key="patientInfoVariable" value="#[output application/json --- readUrl('classpath://deletehospitalhidderegisterhospitalSUCCESSTEST\mock_variable_12.dwl')]" mediaType="application/json" encoding="UTF-8" />
+						<munit-tools:variable key="hidVariable" value="#[output application/json --- readUrl('classpath://deletehospitalhidderegisterhospitalSUCCESSTEST\mock_variable_13.dwl')]" mediaType="application/json" encoding="UTF-8" />
+						<munit-tools:variable key="pidVariable" value="#[output application/json --- readUrl('classpath://deletehospitalhidderegisterhospitalSUCCESSTEST\mock_variable_14.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock Bulk delete-from-patient-table-registerd-to-hospital" doc:id="ce48bc14-525a-4ef4-9fc5-a059a98d5f2d" processor="db:bulk-delete">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="f31e988a-d03b-472d-a6fa-8c3c7794d40c" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/java --- readUrl('classpath://deletehospitalhidderegisterhospitalSUCCESSTEST\mock_payload3.dwl')]" mediaType="application/java" encoding="UTF-8" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://deletehospitalhidderegisterhospitalSUCCESSTEST\mock_variable_15.dwl')]" />
+						<munit-tools:variable key="hospitalInfoVariable" value="#[output application/json --- readUrl('classpath://deletehospitalhidderegisterhospitalSUCCESSTEST\mock_variable_16.dwl')]" mediaType="application/json" encoding="UTF-8" />
+						<munit-tools:variable key="patientInfoVariable" value="#[output application/json --- readUrl('classpath://deletehospitalhidderegisterhospitalSUCCESSTEST\mock_variable_17.dwl')]" mediaType="application/json" encoding="UTF-8" />
+						<munit-tools:variable key="hidVariable" value="#[output application/json --- readUrl('classpath://deletehospitalhidderegisterhospitalSUCCESSTEST\mock_variable_18.dwl')]" mediaType="application/json" encoding="UTF-8" />
+						<munit-tools:variable key="pidVariable" value="#[output application/json --- readUrl('classpath://deletehospitalhidderegisterhospitalSUCCESSTEST\mock_variable_19.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="6ec8ef83-de93-4647-bbdc-890f22da15d2" >
+				<munit:payload value="#[readUrl('classpath://deletehospitalhidderegisterhospitalSUCCESSTEST\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://deletehospitalhidderegisterhospitalSUCCESSTEST\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://deletehospitalhidderegisterhospitalSUCCESSTEST\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to delete:\hospital\(hid)\deregisterhospital:hospital-managment-system-config" doc:id="13fdea86-2590-4431-aa39-b765361a75c7" name="delete:\hospital\(hid)\deregisterhospital:hospital-managment-system-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="83292cd9-9bb5-4387-bce9-c23ab9c809db" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import deletehospitalhidderegisterhospitalSUCCESSTEST::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="delete:\hospital\(hid)\deregisterhospital-FAILURE-TEST" doc:id="eba39ddc-dd1d-4f13-8ea7-580fda161d35" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Validate-Hospital_Id-Patient-Id-in-DB" doc:id="9aaf7825-7652-414f-9f70-1a67905374f5" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="d5a36d58-6d39-49bc-8f54-5c04172781d6" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://deletehospitalhidderegisterhospitalFAILURETEST\mock_payload.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes value="#[readUrl('classpath://deletehospitalhidderegisterhospitalFAILURETEST\mock_attributes.dwl')]" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://deletehospitalhidderegisterhospitalFAILURETEST\mock_variable_.dwl')]" />
+						<munit-tools:variable key="hospitalInfoVariable" value="#[output application/json --- readUrl('classpath://deletehospitalhidderegisterhospitalFAILURETEST\mock_variable_1.dwl')]" mediaType="application/json" encoding="UTF-8" />
+						<munit-tools:variable key="patientInfoVariable" value="#[output application/json --- readUrl('classpath://deletehospitalhidderegisterhospitalFAILURETEST\mock_variable_2.dwl')]" mediaType="application/json" encoding="UTF-8" />
+						<munit-tools:variable key="hidVariable" value="#[output application/json --- readUrl('classpath://deletehospitalhidderegisterhospitalFAILURETEST\mock_variable_3.dwl')]" mediaType="application/json" encoding="UTF-8" />
+						<munit-tools:variable key="pidVariable" value="#[output application/json --- readUrl('classpath://deletehospitalhidderegisterhospitalFAILURETEST\mock_variable_4.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="bf5566e1-8d2c-4f31-ae19-9e3a16e8ecd8" >
+				<munit:payload value="#[readUrl('classpath://deletehospitalhidderegisterhospitalFAILURETEST\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://deletehospitalhidderegisterhospitalFAILURETEST\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://deletehospitalhidderegisterhospitalFAILURETEST\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to delete:\hospital\(hid)\deregisterhospital:hospital-managment-system-config" doc:id="33aa2a05-c59a-480b-a6ed-d724198bf5df" name="delete:\hospital\(hid)\deregisterhospital:hospital-managment-system-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="f988ae6e-dee2-47c0-990d-96d3ead5606c" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import deletehospitalhidderegisterhospitalFAILURETEST::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="get:\patient\searchhospital-search-without-filter-SUCCESS-TEST" doc:id="14e8d669-7b29-4988-9062-21fc95fb1e2b" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock getAllHospitals_Sub_Flow" doc:id="858aa486-4237-473b-bfdd-083097d1b50f" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="5c59abc5-76dc-46b5-aa8c-133179eb71f8" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/java --- readUrl('classpath://getpatientsearchhospitalsearchwithoutfilterSUCCESSTEST\mock_payload.dwl')]" mediaType="application/java" encoding="UTF-8" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://getpatientsearchhospitalsearchwithoutfilterSUCCESSTEST\mock_variable_.dwl')]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="f7f2d4c6-e5f4-4efd-805f-c8a09acc3f99" >
+				<munit:payload value="#[readUrl('classpath://getpatientsearchhospitalsearchwithoutfilterSUCCESSTEST\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://getpatientsearchhospitalsearchwithoutfilterSUCCESSTEST\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://getpatientsearchhospitalsearchwithoutfilterSUCCESSTEST\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to get:\patient\searchhospital:hospital-managment-system-config" doc:id="8e6d6b4c-dd06-4bd2-b31c-5316729ffa9c" name="get:\patient\searchhospital:hospital-managment-system-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="2d1ac7cf-7934-4aba-b6e7-e14ef2698cb7" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import getpatientsearchhospitalsearchwithoutfilterSUCCESSTEST::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="get:\patient\searchhospital-with-filter-SUCCESS-TEST" doc:id="05026918-79f6-495a-a8a6-a83e02f16add" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock getAllHospitals_Sub_Flow" doc:id="08806a6a-2d22-4ded-8323-7bb44710a1bf" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="5c59abc5-76dc-46b5-aa8c-133179eb71f8" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/java --- readUrl('classpath://getpatientsearchhospitalwithfilterSUCCESSTEST\mock_payload.dwl')]" mediaType="application/java" encoding="UTF-8" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://getpatientsearchhospitalwithfilterSUCCESSTEST\mock_variable_.dwl')]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="e42c1cdb-3eaf-41a1-888c-17ec0a004e36" >
+				<munit:payload value="#[readUrl('classpath://getpatientsearchhospitalwithfilterSUCCESSTEST\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://getpatientsearchhospitalwithfilterSUCCESSTEST\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://getpatientsearchhospitalwithfilterSUCCESSTEST\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to get:\patient\searchhospital:hospital-managment-system-config" doc:id="8aedbc97-b74d-481c-bcea-0424a2bc8c47" name="get:\patient\searchhospital:hospital-managment-system-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="21301abc-53ef-42eb-b011-7b28297444e8" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import getpatientsearchhospitalwithfilterSUCCESSTEST::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="get:\hospital\(hid)\getallpatientsinfo-patient-not-found-SUCCESS-TEST" doc:id="5d7e509c-3e94-4fc5-98aa-426037895a4f" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Validate-Hospital_Id-Patient-Id-in-DB" doc:id="1ecfc326-16c0-4d6b-a17e-3c655f07c5c6" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="7ede703f-aeb4-4307-b8ef-a9a4b4ed7d8d" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://gethospitalhidgetallpatientsinfopatientnotfoundSUCCESSTEST\mock_payload.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes value="#[readUrl('classpath://gethospitalhidgetallpatientsinfopatientnotfoundSUCCESSTEST\mock_attributes.dwl')]" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://gethospitalhidgetallpatientsinfopatientnotfoundSUCCESSTEST\mock_variable_.dwl')]" />
+						<munit-tools:variable key="hospitalInfoVariable" value="#[output application/json --- readUrl('classpath://gethospitalhidgetallpatientsinfopatientnotfoundSUCCESSTEST\mock_variable_1.dwl')]" mediaType="application/json" encoding="UTF-8" />
+						<munit-tools:variable key="patientInfoVariable" value="#[output application/json --- readUrl('classpath://gethospitalhidgetallpatientsinfopatientnotfoundSUCCESSTEST\mock_variable_2.dwl')]" mediaType="application/json" encoding="UTF-8" />
+						<munit-tools:variable key="hidVariable" value="#[output application/json --- readUrl('classpath://gethospitalhidgetallpatientsinfopatientnotfoundSUCCESSTEST\mock_variable_3.dwl')]" mediaType="application/json" encoding="UTF-8" />
+						<munit-tools:variable key="pidVariable" value="#[output application/json --- readUrl('classpath://gethospitalhidgetallpatientsinfopatientnotfoundSUCCESSTEST\mock_variable_4.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock Select-Patient-Info" doc:id="4e3c5f1b-709b-40a4-adc3-e138ab90fcb0" processor="db:select">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="685078d2-bc4b-47d2-9605-c79c6d4df7a2" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/java --- readUrl('classpath://gethospitalhidgetallpatientsinfopatientnotfoundSUCCESSTEST\mock_payload1.dwl')]" mediaType="application/java" encoding="UTF-8" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://gethospitalhidgetallpatientsinfopatientnotfoundSUCCESSTEST\mock_variable_5.dwl')]" />
+						<munit-tools:variable key="hospitalInfoVariable" value="#[output application/json --- readUrl('classpath://gethospitalhidgetallpatientsinfopatientnotfoundSUCCESSTEST\mock_variable_6.dwl')]" mediaType="application/json" encoding="UTF-8" />
+						<munit-tools:variable key="patientInfoVariable" value="#[output application/json --- readUrl('classpath://gethospitalhidgetallpatientsinfopatientnotfoundSUCCESSTEST\mock_variable_7.dwl')]" mediaType="application/json" encoding="UTF-8" />
+						<munit-tools:variable key="hidVariable" value="#[output application/json --- readUrl('classpath://gethospitalhidgetallpatientsinfopatientnotfoundSUCCESSTEST\mock_variable_8.dwl')]" mediaType="application/json" encoding="UTF-8" />
+						<munit-tools:variable key="pidVariable" value="#[output application/json --- readUrl('classpath://gethospitalhidgetallpatientsinfopatientnotfoundSUCCESSTEST\mock_variable_9.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="0bc7033a-b20e-4fdc-bda2-64eb19c645ee" >
+				<munit:payload value="#[readUrl('classpath://gethospitalhidgetallpatientsinfopatientnotfoundSUCCESSTEST\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://gethospitalhidgetallpatientsinfopatientnotfoundSUCCESSTEST\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://gethospitalhidgetallpatientsinfopatientnotfoundSUCCESSTEST\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to get:\hospital\(hid)\getallpatientsinfo:hospital-managment-system-config" doc:id="0e130920-f16f-485d-8bbd-27592c807ad3" name="get:\hospital\(hid)\getallpatientsinfo:hospital-managment-system-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="60fa3d2a-d84b-457f-bbbc-0c3b8a115170" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import gethospitalhidgetallpatientsinfopatientnotfoundSUCCESSTEST::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
 
 
 </mule>

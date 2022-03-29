@@ -4,4 +4,16 @@ hostsql-db:
  password: "QHPQ9p8m1Y"
  port: "3306"
  schema : "sql6463705"
+
+cloudhub:
+ username : "100503"
+ password : "Irfan..ii1"
+ environment : "Sandbox"
+ workers : "1"
+ workerType : "Micro"
+ api_name : "hms_api"
+ version : "4.4.0"
+ 
+
+        
  
