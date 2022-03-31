@@ -511,8 +511,21 @@ vars.totalNumberOfPatients]]></ee:set-payload>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
-if(payload !=[])payload else {
-	"Message" : "No data available with your search..please update your search filter"
+if(payload !=[])payload map (item, index) -> {
+
+"HospitalName" : item.hospitalName,
+"Area" : item.hospitalArea,
+"City" : item.hospitalCity,
+"State" : item.hospitalState,
+"Country" : item.hospitalCountry,
+"Pin" : item.hospitalPin,
+"Beds Available" : item.hospitalAvailableBeds,
+"Phone No" : item.hospitalPhoneNo
+}
+
+else {
+"Message" : "No data available with your search..please update your search filter"	
+
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
@@ -538,9 +551,14 @@ payload]]></ee:set-payload>
 output application/json
 ---
 payload orderBy ((item, index) -> item.hospitalAvailableBeds) map (item, index) -> {
-    "HospitalName" : item.hospitalName,
-    "AvailableBeds" : item.hospitalAvailableBeds,
-    "HospitalPhoneNumber" : item.hospitalPhoneNo
+"HospitalName" : item.hospitalName,
+"Area" : item.hospitalArea,
+"City" : item.hospitalCity,
+"State" : item.hospitalState,
+"Country" : item.hospitalCountry,
+"Pin" : item.hospitalPin,
+"Beds Available" : item.hospitalAvailableBeds,
+"Phone No" : item.hospitalPhoneNo
 
 }]]></ee:set-payload>
             </ee:message>
@@ -554,9 +572,14 @@ output application/json
 ---
 
 payload orderBy ((item, index) -> -item.hospitalAvailableBeds) map (item, index) -> {
-    "HospitalName" : item.hospitalName,
-    "AvailableBeds" : item.hospitalAvailableBeds,
-    "HospitalPhoneNumber" : item.hospitalPhoneNo
+"HospitalName" : item.hospitalName,
+"Area" : item.hospitalArea,
+"City" : item.hospitalCity,
+"State" : item.hospitalState,
+"Country" : item.hospitalCountry,
+"Pin" : item.hospitalPin,
+"Beds Available" : item.hospitalAvailableBeds,
+"Phone No" : item.hospitalPhoneNo
 
 }]]></ee:set-payload>
 					</ee:message>
